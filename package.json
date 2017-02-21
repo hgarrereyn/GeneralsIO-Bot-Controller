@@ -1,0 +1,19 @@
+{
+  "name": "GeneralsIO Bot Controller",
+  "version": "1.0.0",
+  "description": "",
+  "main": "window_main.js",
+  "dependencies": {
+    "electron": "^1.4.15",
+    "socket.io-client": "^1.7.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo 'No tests implemented.'"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [],
+  "author": "Harrison Green"
+}

@@ -1,0 +1,97 @@
+
+<head>
+	<link href="style.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+
+	<script type="text/javascript" src="jqlite.min.js"></script>
+
+	<script>var s = require('./viewer.js')</script>
+
+	<div id="drag_bar">
+		<h2 class="title">Super Bot Control Panel 9000</h2>
+	</div>
+
+	<div id="background"></div>
+
+	<div id="container" class="container">
+
+		<div class="panel container-vert" id="params">
+			<div class="panel-vert panel-grow panel-outline">
+				<div class="title_param">
+					<span class="title">Status</span>
+					<span class="value" id="param_status">Idle</span>
+				</div>
+
+				<hr/>
+
+				<div class="title_param">
+					<span class="title">Username</span>
+					<span class="value" id="param_username"></span>
+				</div>
+
+				<div class="title_param">
+					<span class="title">User ID</span>
+					<span class="value" id="param_user_id"></span>
+				</div>
+
+				<div class="title_param">
+					<span class="title">Game ID</span>
+					<span class="value" id="param_game_id"></span>
+				</div>
+
+				<div class="title_param">
+					<span class="title">Game Type</span>
+					<span class="value" id="param_game_type"></span>
+				</div>
+
+				<hr/>
+
+				<div id="param_queue"></div>
+			</div>
+
+			<div class="panel-vert panel-outline">
+				<div class="title_entry">
+					<span class="title">User ID</span>
+					<span class="entry"><input id="entry_user_id" type="text"/></span>
+				</div>
+
+				<div class="title_entry">
+					<span class="title">Game ID</span>
+					<span class="entry"><input id="entry_game_id" type="text"/></span>
+				</div>
+
+				<div class="button button-green" id="join_custom_game">Join Custom Game</div>
+
+				<div class="button button-red button-disabled" id="leave_custom_game">Leave Queue</div>
+			</div>
+		</div>
+
+		<div class="panel panel-grow container-vert">
+			<div class="panel-vert panel-outline panel-grow">
+				<div id="viewer_map" style="display:none;">
+					<div id="viewer_offset">
+						<table>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel-vert panel-outline">
+				<div id="viewer_scores" style="display:none;">
+					<table>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-outline" id="console">
+		</div>
+
+	</div>
+</body>
