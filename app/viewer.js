@@ -125,7 +125,7 @@ game.viewer = {
 				dead: false
 			};
 
-			var row = '<tr><td id="stars_'+u+'">?</td><td id="player_'+u+'">'+usernames[u]+'</td><td id="army_'+u+'">0</td><td id="land_'+u+'">0</td></tr>';
+			var row = '<tr class="player'+u+'"><td id="stars_'+u+'">?</td><td id="player_'+u+'">'+usernames[u]+'</td><td id="army_'+u+'">0</td><td id="land_'+u+'">0</td></tr>';
 
 			$('#viewer_scores tbody')[0].innerHTML += (row);
 		}
@@ -161,6 +161,7 @@ game.viewer = {
 	},
 
 	processUpdate: (data) => {
+		//Patch diffs
 		game.viewer.cities = patch(game.viewer.cities, data.cities_diff);
 		game.viewer.map = patch(game.viewer.map, data.map_diff);
 		game.viewer.generals = data.generals;
@@ -168,18 +169,21 @@ game.viewer = {
 		var width = game.viewer.map[0];
 		var height = game.viewer.map[1];
 
+		//Render map if it is the first update
 		if (!game.viewer.hasMap) {
 			game.viewer.initializeMap();
 			game.viewer.hasMap = true;
 			game.logger.log('Dimensions: ' + width + ' by ' + height);
 		}
 
+		//Set army numbers
 		for (var i = 2; i < (width * height) + 2; ++i) {
 			var tile = i - 2;
 
 			$('#viewer_map #tile_' + tile).text(game.viewer.map[i]);
 		}
 
+		//Set terrain classes
 		for (var i = 2 + (width * height); i <= (width * height * 2) + 2; ++i) {
 			var tile = i - 2 - (width * height);
 
@@ -193,10 +197,12 @@ game.viewer = {
 			}
 		}
 
+		//Place cities
 		for (var i in game.viewer.cities) {
 			$('#viewer_map #tile_' + game.viewer.cities[i]).addClass('tile_city');
 		}
 
+		//Place generals
 		for (var i in game.viewer.generals) {
 			$('#viewer_map #tile_' + game.viewer.generals[i]).addClass('tile_general');
 		}

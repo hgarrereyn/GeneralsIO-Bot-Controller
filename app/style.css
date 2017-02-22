@@ -140,90 +140,114 @@ body {
 	font-family: 'HelveticaNeue-Thin';
 	color: white;
 	border: 2px solid white;
+	border-spacing: 0px;
 }
 
 #viewer_map td {
-	width: 30px;
-	height: 30px;
-	border: 1px solid #333;
+	border: 1px solid #111;
 	padding: 0px;
 	text-align: center;
-	border-radius: 3px;
+	text-shadow: rgba(0,0,0,0.4) 1px 1px 5px;
+
+	background-size: contain;
+	background-position: center center;
+	background-repeat: no-repeat;
 }
 
-#viewer_map .tile_fog {
-	background-color: #222;
-	color: #222;
+#viewer_map.small td {
+	width: 25px;
+	height: 25px;
+	min-width: 25px;
+	max-width: 25px;
+	min-height: 25px;
+	max-height: 25px;
+	font-size: 12px;
 }
 
-.tile_p0 {
+#viewer_map.med td {
+	width: 40px;
+	height: 40px;
+	min-width: 40px;
+	max-width: 40px;
+	min-height: 40px;
+	max-height: 40px;
+}
+
+#viewer_map.large td {
+	width: 50px;
+	height: 50px;
+	min-width: 50px;
+	max-width: 50px;
+	min-height: 50px;
+	max-height: 50px;
+}
+
+
+#viewer_map .tile_p0, #viewer_scores .player0 {
 	background-color: red;
 }
 
-.tile_p1 {
+#viewer_map .tile_p1, #viewer_scores .player1 {
 	background-color: orange;
 }
 
-.tile_p2 {
+#viewer_map .tile_p2, #viewer_scores .player2 {
 	background-color: yellow;
 }
 
-.tile_p3 {
+#viewer_map .tile_p3, #viewer_scores .player3 {
 	background-color: green;
 }
 
-.tile_p4 {
+#viewer_map .tile_p4, #viewer_scores .player4 {
 	background-color: blue;
 }
 
-.tile_p5 {
+#viewer_map .tile_p5, #viewer_scores .player5 {
 	background-color: gray;
 }
 
-.tile_p6 {
+#viewer_map .tile_p6, #viewer_scores .player6 {
 	background-color: brown;
 }
 
-.tile_p7 {
+#viewer_map .tile_p7, #viewer_scores .player7 {
 	background-color: orangered;
 }
 
-#viewer_map .tile_empty {
+#viewer_map .tile_fog, #viewer_map .tile_empty, #viewer_map .tile_obstacle, #viewer_map .tile_mountain {
 	color: rgba(0,0,0,0);
+	text-shadow: none;
+	border-color: rgba(0,0,0,0);
+}
+
+#viewer_map .tile_fog {
+	background-color: #444;
+}
+
+#viewer_map .tile_empty {
+	background-color: #aaa;
+	border-color: #111;
 }
 
 #viewer_map .tile_obstacle {
+	background-color: #444;
 	background-image:url('res/obstacle.png');
-	background-size: contain;
-	background-position: center center;
-	background-repeat: no-repeat;
-	color: rgba(0,0,0,0);
 }
 
 #viewer_map .tile_mountain {
+	background-color: #444;
 	background-image:url('res/mountain.png');
-	background-size: contain;
-	background-position: center center;
-	background-repeat: no-repeat;
-	color: rgba(0,0,0,0);
 }
 
 #viewer_map .tile_city {
 	background-image:url('res/city.png');
-	background-size: contain;
-	background-position: center center;
-	background-repeat: no-repeat;
+	color: white;
 }
 
 #viewer_map .tile_general {
 	background-image:url('res/crown.png');
-	background-size: contain;
-	background-position: center center;
-	background-repeat: no-repeat;
-}
-
-#viewer_offset {
-	position: absolute;
+	color: white;
 }
 
 #viewer_scores table {
@@ -234,6 +258,7 @@ body {
 #viewer_scores td {
 	text-align: center;
 	color: white;
+	text-shadow: rgba(0,0,0,0.4) 1px 1px 5px;
 }
 
 .button {
