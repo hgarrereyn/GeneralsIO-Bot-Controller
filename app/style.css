@@ -152,6 +152,8 @@ body {
 	background-size: contain;
 	background-position: center center;
 	background-repeat: no-repeat;
+
+	cursor: pointer;
 }
 
 #viewer_map.small td {
@@ -236,7 +238,8 @@ body {
 }
 
 #viewer_map .tile_mountain {
-	background-color: #444;
+	background-color: #666;
+	border: 1px solid #222;
 	background-image:url('res/mountain.png');
 }
 
@@ -316,6 +319,10 @@ body {
 #console p {
 	margin: 0px;
 	white-space: pre-wrap;
+}
+
+#console p.warn {
+	color: #dbe042;
 }
 
 #console p::before {

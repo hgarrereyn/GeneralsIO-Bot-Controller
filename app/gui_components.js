@@ -1,17 +1,24 @@
-var Interface = require('./interface.js');
+var gui_comp = {};
 
-var game = {};
-
-game.logger = {
+//Handles logging mechanisms
+gui_comp.logger = {
 	log: function (text) {
 		console.log(text);
 
 		$('#console').append('<p>' + text + '</p>');
 		$('#console').prop('scrollTop', $('#console').prop('scrollHeight'));
-	}
+	},
+
+	warn: function (text) {
+		console.warn(text);
+
+		$('#console').append('<p class="warn">' + text + '</p>');
+		$('#console').prop('scrollTop', $('#console').prop('scrollHeight'));
+	},
 };
 
-game.params = {
+//Handles queue and game parameters
+gui_comp.params = {
 	inQueue: false,
 	inGame: false,
 
@@ -48,36 +55,36 @@ game.params = {
 	//Helper functions
 
 	joinedQueue: () => {
-		game.params.inQueue = true;
+		gui_comp.params.inQueue = true;
 		$("#join_custom_game").addClass('button-disabled');
 		$("#leave_custom_game").removeClass('button-disabled');
 
-		game.params.setStatus('In Queue');
+		gui_comp.params.setStatus('In Queue');
 	},
 
 	joinedGame: () => {
-		game.params.inQueue = false;
-		game.params.inGame = true;
+		gui_comp.params.inQueue = false;
+		gui_comp.params.inGame = true;
 		$("#leave_custom_game").text("Quit Game");
 
-		game.params.setStatus('In Game');
+		gui_comp.params.setStatus('In Game');
 	},
 
 	//called when user left queue or game
 	leftQueueGame: () => {
-		game.params.inQueue = false;
-		game.params.inGame = false;
+		gui_comp.params.inQueue = false;
+		gui_comp.params.inGame = false;
 
 		$("#join_custom_game").removeClass('button-disabled');
 		$("#leave_custom_game").addClass('button-disabled');
 		$("#leave_custom_game").text("Leave Queue");
 
-		game.params.clearParams();
-		game.params.setStatus('Idle');
+		gui_comp.params.clearParams();
+		gui_comp.params.setStatus('Idle');
 	}
 };
 
-/*Taken from the tutorial*/
+/* Written by Victor Zhou */
 function patch(old, diff) {
 	var out = [];
 	var i = 0;
@@ -95,7 +102,8 @@ function patch(old, diff) {
 	return out;
 }
 
-game.viewer = {
+//Handles map, scores and gameplay elements
+gui_comp.viewer = {
 	scores: {},
 	cities: [],
 	map: [],
@@ -111,13 +119,13 @@ game.viewer = {
 	hasMap: false,
 
 	setUsernames: (usernames) => {
-		game.viewer.scores = {};
+		gui_comp.viewer.scores = {};
 
 		//clear scoreboard
 		$('#viewer_scores tbody').html('<tr><td>Stars</td><td>Player</td><td>Army</td><td>Land</td></tr>');
 
 		for (var u in usernames) {
-			game.viewer.scores[u] = {
+			gui_comp.viewer.scores[u] = {
 				stars: '',
 				player: usernames[u],
 				army: 0,
@@ -136,7 +144,7 @@ game.viewer = {
 		for (var i in stars) {
 			$('#viewer_scores #stars_' + i).text(stars[i]);
 
-			game.viewer.scores[i].stars = stars[i];
+			gui_comp.viewer.scores[i].stars = stars[i];
 		}
 	},
 
@@ -145,8 +153,8 @@ game.viewer = {
 			$('#viewer_scores #army_' + i).text(scores[i].total);
 			$('#viewer_scores #land_' + i).text(scores[i].tiles);
 
-			game.viewer.scores[i].army = scores[i].total;
-			game.viewer.scores[i].land = scores[i].tiles;
+			gui_comp.viewer.scores[i].army = scores[i].total;
+			gui_comp.viewer.scores[i].land = scores[i].tiles;
 		}
 	},
 
@@ -158,29 +166,30 @@ game.viewer = {
 	hideScores: () => {
 		$('#viewer_scores').hide();
 		$('#viewer_map').hide();
+		gui_comp.viewer.hasMap = false;
 	},
 
 	processUpdate: (data) => {
 		//Patch diffs
-		game.viewer.cities = patch(game.viewer.cities, data.cities_diff);
-		game.viewer.map = patch(game.viewer.map, data.map_diff);
-		game.viewer.generals = data.generals;
+		gui_comp.viewer.cities = patch(gui_comp.viewer.cities, data.cities_diff);
+		gui_comp.viewer.map = patch(gui_comp.viewer.map, data.map_diff);
+		gui_comp.viewer.generals = data.generals;
 
-		var width = game.viewer.map[0];
-		var height = game.viewer.map[1];
+		var width = gui_comp.viewer.map[0];
+		var height = gui_comp.viewer.map[1];
 
 		//Render map if it is the first update
-		if (!game.viewer.hasMap) {
-			game.viewer.initializeMap();
-			game.viewer.hasMap = true;
-			game.logger.log('Dimensions: ' + width + ' by ' + height);
+		if (!gui_comp.viewer.hasMap) {
+			gui_comp.viewer.initializeMap();
+			gui_comp.viewer.hasMap = true;
+			gui_comp.logger.log('Dimensions: ' + width + ' by ' + height);
 		}
 
 		//Set army numbers
 		for (var i = 2; i < (width * height) + 2; ++i) {
 			var tile = i - 2;
 
-			$('#viewer_map #tile_' + tile).text(game.viewer.map[i]);
+			$('#viewer_map #tile_' + tile).text(gui_comp.viewer.map[i]);
 		}
 
 		//Set terrain classes
@@ -189,30 +198,30 @@ game.viewer = {
 
 			$('#viewer_map #tile_' + tile).attr('class','');
 
-			if (game.viewer.map[i] < 0 && game.viewer.map[i] >= -4)
-				$('#viewer_map #tile_' + tile).addClass(game.viewer.terrainConst[game.viewer.map[i] + '']);
+			if (gui_comp.viewer.map[i] < 0 && gui_comp.viewer.map[i] >= -4)
+				$('#viewer_map #tile_' + tile).addClass(gui_comp.viewer.terrainConst[gui_comp.viewer.map[i] + '']);
 
-			if (game.viewer.map[i] >= 0) {
-				$('#viewer_map #tile_' + tile).addClass('tile_p' + game.viewer.map[i]);
+			if (gui_comp.viewer.map[i] >= 0) {
+				$('#viewer_map #tile_' + tile).addClass('tile_p' + gui_comp.viewer.map[i]);
 			}
 		}
 
 		//Place cities
-		for (var i in game.viewer.cities) {
-			$('#viewer_map #tile_' + game.viewer.cities[i]).addClass('tile_city');
+		for (var i in gui_comp.viewer.cities) {
+			$('#viewer_map #tile_' + gui_comp.viewer.cities[i]).addClass('tile_city');
 		}
 
 		//Place generals
-		for (var i in game.viewer.generals) {
-			$('#viewer_map #tile_' + game.viewer.generals[i]).addClass('tile_general');
+		for (var i in gui_comp.viewer.generals) {
+			$('#viewer_map #tile_' + gui_comp.viewer.generals[i]).addClass('tile_general');
 		}
 	},
 
 	initializeMap: () => {
 		$('#viewer_map tbody').html('');
 
-		var width = game.viewer.map[0];
-		var height = game.viewer.map[1];
+		var width = gui_comp.viewer.map[0];
+		var height = gui_comp.viewer.map[1];
 
 		for (var row = 0; row < height; ++row) {
 
@@ -229,32 +238,4 @@ game.viewer = {
 	}
 }
 
-game.controller = {};
-
-var i = new Interface(game.logger, game.params, game.viewer, game.controller);
-
-$(document).ready(function() {
-	i.connect();
-
-	$('#join_custom_game').click(function () {
-		//Check if we're already in a game
-		if (game.params.inQueue || game.params.inGame) return;
-
-		var user_id = $('#entry_user_id').val();
-		var game_id = $('#entry_game_id').val();
-
-		i.joinCustom(user_id, game_id);
-	});
-
-	$('#leave_custom_game').click(function () {
-		if (game.params.inQueue) {
-			i.leaveQueue();
-		} else if (game.params.inGame) {
-			i.leaveGame();
-		}
-	})
-});
-
-
-
-module.exports = game;
+module.exports = gui_comp;
